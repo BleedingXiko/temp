@@ -129,43 +129,39 @@ input:checked + .slider .feather-sun {
 </style>
 
 <script is:inline>
-var htmlElement = document.querySelector("html");
+  // Get the theme toggle input
+  const themeToggle = document.querySelector(
+            '.theme-switch input[type="checkbox"]'
+          );
 
-// Function to get the theme preference
-function getTheme() {
-  if (localStorage.getItem('theme')) {
-    return localStorage.getItem('theme');
-  }
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
-}
+          // Get the current theme from local storage
+          const currentTheme = localStorage.getItem("theme");
 
-// Get the theme from localStorage
-var theme = getTheme();
+          // If the current local storage item can be found
+          if (currentTheme) {
+            // Set the body data-theme attribute to match the local storage item
+            document.documentElement.setAttribute("data-theme", currentTheme);
 
-// Set the theme in local storage if not already set
-if (!localStorage.getItem('theme')) {
-  localStorage.setItem('theme', theme);
-}
+            // If the current theme is dark, check the theme toggle
+            if (currentTheme === "dark") {
+              themeToggle.checked = true;
+            }
+          }
 
-// Update the HTML element with the current theme
-htmlElement.setAttribute("data-theme", theme);
-console.log(theme);
+          // Function that will switch the theme based on the if the theme toggle is checked or not
+          function switchTheme(e) {
+            if (e.target.checked) {
+              document.documentElement.setAttribute("data-theme", "dark");
+              localStorage.setItem("theme", "dark");
+            } else {
+              document.documentElement.setAttribute("data-theme", "light");
+              localStorage.setItem("theme", "light");
+            }
+          }
 
-// Get the theme toggle button
-var themeToggle = document.getElementById("checkbox");
+          // Add an event listener to the theme toggle, which will switch the theme
+          themeToggle.addEventListener("change", switchTheme, false);
 
-// Add a click event listener to the button
-themeToggle.addEventListener("click", function() {
-  // Check the current theme and toggle it
-  theme = theme === 'dark' ? 'light' : 'dark';
-
-  htmlElement.setAttribute("data-theme", theme);
-  localStorage.setItem('theme', theme);
-  console.log(theme);
-});
 
 
 </script>
